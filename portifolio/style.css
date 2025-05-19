@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --transition-speed: 0.5s;
+    --primary-gradient: linear-gradient(45deg, #333333, #555555);
+    --hover-gradient: linear-gradient(45deg, #222222, #444444);
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.gradient-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background: var(--primary-gradient);
+}
+
+.project-card {
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-img {
+    transform: scale(1.05);
+}
+
+.tech-icon {
+    transition: transform var(--transition-speed);
+}
+
+.tech-icon:hover {
+    transform: scale(1.1);
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+    transition: width var(--transition-speed);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.slide-in {
+    animation: slideIn 1s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+.animate-delay-5 { animation-delay: 0.5s; }
+
+.bg-gradient {
+    background: linear-gradient(135deg, #1e1e1e, #2d2d2d);
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Modal Content Scrolling */
+.modal-content {
+    max-height: 50vh; /* Reduzindo um pouco a altura máxima para garantir que a rolagem seja necessária */
+    overflow-y: auto;
+    padding-right: 10px;
+    -webkit-overflow-scrolling: touch; /* Para melhor suporte em iOS */
+}
+
+/* Melhorar o estilo da barra de rolagem */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Garantir que o diálogo modal não seja muito grande */
+.modal-dialog {
+    max-height: 90vh;
+    overflow: hidden; /* Importante: remover overflow-y: auto daqui */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Adicionar espaço no final do conteúdo para melhor visualização */
+.modal-content {
+    padding-bottom: 20px;
+}
+
+/* Garantir espaço suficiente para o botão de fechar */
+.close-btn {
+    z-index: 50; /* Aumentar para garantir que fique acima de outros elementos */
+}
+
+/* Melhorar a interatividade dos cards de projeto */
+.project-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo para quando o modal está aberto */
+body.modal-open {
+    overflow: hidden;
+}
