@@ -1027,7 +1027,9 @@
                 'phone-number': 'Número de Telefone',
                 'location': 'Localização',
                 'social-profiles': 'Redes Sociais',
-                'copyright': '&copy; ' + new Date().getFullYear() + ' Danilo Correia. Todos os direitos reservados.'
+                'copyright': '&copy; ' + new Date().getFullYear() + ' Danilo Correia. Todos os direitos reservados.',
+                'private-project': 'Projeto Privado',
+                'private-code': 'Código Privado'
             },
             'en': {
                 'home': 'Home',
@@ -1077,7 +1079,9 @@
                 'phone-number': 'Phone Number',
                 'location': 'Location',
                 'social-profiles': 'Social Profiles',
-                'copyright': '&copy; ' + new Date().getFullYear() + ' Danilo Correia. All rights reserved.'
+                'copyright': '&copy; ' + new Date().getFullYear() + ' Danilo Correia. All rights reserved.',
+                'private-project': 'Private Project',
+                'private-code': 'Private Code'
             }
         };
     
@@ -1133,13 +1137,33 @@
             document.querySelectorAll('[data-lang]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (key && translations[lang][key]) {
-                    if (key.includes('title') || key.includes('description')) {
+                    if (key.includes('title') || key.includes('description') || key === 'copyright') {
                         el.innerHTML = translations[lang][key];
                     } else {
                         el.textContent = translations[lang][key];
                     }
                 }
             });
+            
+            // Se um modal de projeto estiver aberto, atualize o conteúdo do modal para o novo idioma
+            const projectModal = document.getElementById('project-modal');
+            if (projectModal && !projectModal.classList.contains('hidden')) {
+                // Identifique qual projeto está aberto atualmente
+                const modalTitle = document.getElementById('project-modal-title').textContent;
+                // Encontre o ID do projeto com base no título
+                let openProjectId = null;
+                for (const [id, data] of Object.entries(projectsData)) {
+                    if (data.title === modalTitle) {
+                        openProjectId = id;
+                        break;
+                    }
+                }
+                
+                // Se encontrarmos o projeto, atualize o modal
+                if (openProjectId) {
+                    showProjectModal(openProjectId);
+                }
+            }
         }
     
         // Project data
@@ -1174,9 +1198,10 @@
                     ]
                 },
                 technologies: ['HTML', 'CSS', 'TailwindCSS', 'JavaScript', 'Python', 'Django', 'SQLite', 'MySQL', 'Mercado Pago API'],
-                liveUrl: '#',
+                liveUrl: 'https://imovelfacil.pythonanywhere.com/',
                 githubUrl: 'https://github.com/DaniloCorreia1',
-                icon: 'fa-house'
+                icon: 'fa-house',
+                isPrivate: false // Marcar como privado
             },
             'ancore': {
                 title: 'ANCORE',
@@ -1206,7 +1231,8 @@
                 technologies: ['HTML', 'CSS', 'Django', 'Python', 'Bootstrap', 'JavaScript', 'MySQL', 'PythonAnywhere'],
                 liveUrl: '#',
                 githubUrl: 'https://github.com/DaniloCorreia1',
-                icon: 'fa-building'
+                icon: 'fa-building',
+                isPrivate: true // Marcar como privado
             },
             'sge': {
                 title: 'SGE',
@@ -1236,7 +1262,8 @@
                 technologies: ['HTML', 'CSS', 'Django', 'Python', 'Bootstrap', 'JavaScript', 'PostgreSQL', 'AWS EC2'],
                 liveUrl: '#',
                 githubUrl: 'https://github.com/DaniloCorreia1',
-                icon: 'fa-boxes-stacked'
+                icon: 'fa-boxes-stacked',
+                isPrivate: true // Marcar como privado
             },
             'ia-assistente': {
                 title: 'IA Assistente',
@@ -1266,7 +1293,8 @@
                 technologies: ['HTML', 'CSS', 'Django', 'Python', 'JavaScript', 'PythonAnywhere', 'OpenAI API', 'NLP', 'Voice Recognition', 'Text-to-Speech', 'PDF Analysis'],
                 liveUrl: '#',
                 githubUrl: 'https://github.com/DaniloCorreia1',
-                icon: 'fa-robot'
+                icon: 'fa-robot',
+                isPrivate: true // Marcar como privado
             },
             'anonymous': {
                 title: 'Anonymous',
@@ -1292,7 +1320,8 @@
                 technologies: ['HTML', 'CSS'],
                 liveUrl: 'https://danilocorreia1.github.io/anonymous/',
                 githubUrl: 'https://github.com/DaniloCorreia1/anonymous',
-                icon: 'fa-mask'
+                icon: 'fa-mask',
+                isPrivate: false // Projeto público
             },
             'projeto-awax': {
                 title: 'Projeto Awax',
@@ -1320,7 +1349,8 @@
                 technologies: ['HTML', 'CSS'],
                 liveUrl: 'https://danilocorreia1.github.io/Projeto-Awax/',
                 githubUrl: 'https://github.com/DaniloCorreia1/Projeto-Awax',
-                icon: 'fa-desktop'
+                icon: 'fa-desktop',
+                isPrivate: false // Projeto público
             },
         };
     
@@ -1400,8 +1430,46 @@
                 const liveBtn = document.getElementById('project-modal-live');
                 const githubBtn = document.getElementById('project-modal-github');
                 
-                liveBtn.href = project.liveUrl || '#';
-                githubBtn.href = project.githubUrl || '#';
+                // Verificar se o projeto é privado
+                if (project.isPrivate) {
+                    // Mudanças para projetos privados
+                    liveBtn.href = '#';
+                    liveBtn.classList.add('cursor-not-allowed', 'opacity-70');
+                    
+                    // Substituir o texto do botão "Ver ao vivo" por "Projeto Privado"
+                    const liveText = liveBtn.querySelector('span');
+                    if (liveText) {
+                        liveText.textContent = translations[currentLang]['private-project'];
+                    }
+                    
+                    githubBtn.href = '#';
+                    githubBtn.classList.add('cursor-not-allowed', 'opacity-70');
+                    
+                    // Substituir o texto do botão "Ver código" por "Código Privado"
+                    const codeText = githubBtn.querySelector('span');
+                    if (codeText) {
+                        codeText.textContent = translations[currentLang]['private-code'];
+                    }
+                } else {
+                    // Projetos públicos normais
+                    liveBtn.href = project.liveUrl || '#';
+                    liveBtn.classList.remove('cursor-not-allowed', 'opacity-70');
+                    
+                    // Restaurar o texto original
+                    const liveText = liveBtn.querySelector('span');
+                    if (liveText) {
+                        liveText.textContent = translations[currentLang]['view-live'];
+                    }
+                    
+                    githubBtn.href = project.githubUrl || '#';
+                    githubBtn.classList.remove('cursor-not-allowed', 'opacity-70');
+                    
+                    // Restaurar o texto original
+                    const codeText = githubBtn.querySelector('span');
+                    if (codeText) {
+                        codeText.textContent = translations[currentLang]['view-code'];
+                    }
+                }
                 
                 // Show modal and prevent body scrolling
                 projectModal.classList.remove('hidden');
